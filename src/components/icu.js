@@ -17,8 +17,9 @@ function Home() {
   const [buttonLabel, setbuttonLabel] = useState(false)
 
   let data1, data2, timeData;
-  let dataURL = 'https://iot-task0.herokuapp.com/api/readings/withtime'
-  let buttonData = 'https://iot-task0.herokuapp.com/api/interface/buttonstate'
+  const dataURL = 'http://localhost:8000/api/readings/withtime';
+  const buttonOneUrl = 'http://localhost:8000/api/interface/buttonOnestate';
+  const buttonTwoUrl = 'http://localhost:8000/api/interface/buttonTwostate';
 
   useEffect(() => {
 
@@ -47,7 +48,7 @@ function Home() {
 
     let config = {
       method: 'post',
-      url: buttonData,
+      url: buttonOneUrl,
       headers: {
         'Content-Type': 'application/json'
       },
@@ -65,6 +66,28 @@ function Home() {
   const postReq2 = () => {
     setButtonState2(!buttonState2);
     setButtonText2(buttonState2 ? "ON_2" : "OFF_2");
+
+    let data = JSON.stringify({
+      "buttonState": buttonState2
+    });
+
+    let config = {
+      method: 'post',
+      url: buttonTwoUrl,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: data
+    };
+    axios(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log(data);
+
     setbuttonLabel(!buttonLabel)
   };
 
