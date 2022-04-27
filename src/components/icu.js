@@ -8,7 +8,8 @@ function Home() {
 
   const [sensor_data1, setSensor_Data1] = useState([])
   const [sensor_data2, setSensor_Data2] = useState([])
-  const [timeStamp, setTimeStamp] = useState([]);
+  const [tempTimeStamp, setTempTimeStamp] = useState([]);
+  const [distTimeStamp, setDistTimeStamp] = useState([]);
   let [seconds, setSeconds] = useState([])
   const [buttonText2, setButtonText2] = useState("ON_2");
   const [buttonState2, setButtonState2] = useState(false)
@@ -16,10 +17,10 @@ function Home() {
   const [buttonState1, setButtonState1] = useState(false)
   const [buttonLabel, setbuttonLabel] = useState(false)
 
-  let data1, data2, timeData;
-  const dataURL = 'http://localhost:8000/api/readings/withtime';
-  const buttonOneUrl = 'http://localhost:8000/api/interface/buttonOnestate';
-  const buttonTwoUrl = 'http://localhost:8000/api/interface/buttonTwostate';
+  let data1, data2, tempTimeData, distTimeData;
+  const dataURL = "https://iot-task0.herokuapp.com/api/readings/withtime";
+  const buttonOneUrl = 'https://iot-task0.herokuapp.com/api/interface/buttonOnestate';
+  const buttonTwoUrl = 'https://iot-task0.herokuapp.com/api/interface/buttonTwostate';
 
   useEffect(() => {
 
@@ -28,10 +29,12 @@ function Home() {
       .then((json) => {
         data1 = json.temperature
         data2 = json.distance
-        timeData = json.time
+        tempTimeData = json.tempTime
+        distTimeData = json.distTime
         setSensor_Data1(data1)
         setSensor_Data2(data2)
-        setTimeStamp(timeData)
+        setTempTimeStamp(tempTimeData)
+        setDistTimeStamp(distTimeData)
       })
 
   }, [setInterval(() => {
@@ -134,7 +137,7 @@ function Home() {
 
       <h2>Patient1</h2>
       <div className='chart1'>
-        <Graph data={sensor_data1} timeData={timeStamp} />
+        <Graph data={sensor_data1} timeData={tempTimeStamp} title={'Sensor1'} />
         <button onClick={postReq1} className={'button ' + (buttonState1 ? 'button--off' : '')}>{buttonText1}</button>
       </div>
 
@@ -142,7 +145,7 @@ function Home() {
       <h2>Patient2</h2>
 
       <div className='chart2'>
-        <Graph2 data={sensor_data2} timeData={timeStamp} title={'Temprature'} />
+        <Graph2 data={sensor_data2} timeData={distTimeStamp} title={'Sensor2'} />
         <button onClick={postReq2} className={'button ' + (buttonState2 ? 'button--off' : '')}>{buttonText2}</button>
       </div>
 
